@@ -30,7 +30,10 @@ export default function App() {
       </head>
       <body className="bg-bland w-screen h-screen">
         <Nav></Nav>
-        <Outlet />
+        <div className="h-max max-w-5xl mx-auto p-12">
+          <Outlet />
+        </div>
+        {/* <footer className="bottom-0 h-28 border-t-2 border-slate-200"></footer> */}
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === 'development' && <LiveReload />}

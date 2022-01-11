@@ -17,6 +17,19 @@ module.exports = {
       skew: {
         '-20': '-20deg',
       },
+      keyframes: {
+        appear: {
+          '0%': {opacity: '0'},
+          '100%': {opacity: '1'},
+        },
+        slide: {
+          '0%': {opacity: '0', transform: 'translateX(-6rem)'},
+          '100%': {opacity: '1'},
+        },
+      },
+      animation: {
+        appear: 'appear 1s ease-in',
+      },
     },
   },
   variants: {
@@ -24,5 +37,5 @@ module.exports = {
       scale: ['group-hover'],
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 }

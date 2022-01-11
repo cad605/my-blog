@@ -1,9 +1,71 @@
+import type {LoaderFunction} from 'remix'
+import {Link, useLoaderData} from 'remix'
+import {Blog} from '@prisma/client'
+import {db} from '~/utils/db.server'
+
+type LoaderData = {
+  blogListItems: Array<Blog>
+}
+
+export const loader: LoaderFunction = async ({params}) => {
+  const data: LoaderData = {blogListItems: await db.blog.findMany({take: 5})}
+  return data
+}
+
 export default function Index() {
+  const {blogListItems} = useLoaderData<LoaderData>()
+
   return (
-    <main className="flex flex-col justify-center py-12 px-6 lg:px-8">
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10"></div>
-      </div>
+    <main className="flex flex-col">
+      <section className="mb-12">
+        <h1 className="text-4xl md:text-6xl text-zinc-800 font-bold mb-6 animate-[slide_1s_ease-in-out]">
+          Hey there, I'm <span className="underline">Chris</span>.
+        </h1>
+        <div className="text-3xl md:text-5xl text-slate-600 mb-6 animate-[slide_1.5s_ease-in-out]">
+          I'm a software engineer living in New York City.
+        </div>
+        <div className="text-3xl md:text-5xl text-slate-600 animate-[slide_2s_ease-in-out]">
+          I often like to write about programming, the web, and other topics I'm
+          learning about.
+        </div>
+      </section>
+      <section className="animate-[slide_2.5s_ease-in-out]">
+        <div className="">
+          <Link
+            to="/blog"
+            className="text-2xl md:text-3xl text-zinc-800 font-bold group hover:underline"
+          >
+            Blog
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              width="18"
+              height="18"
+              className="inline-block group-hover:translate-x-2 transition duration-300"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+          </Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 place-content-center">
+            {blogListItems.map(blog => (
+              <div
+                key={blog.slug}
+                className="border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm"
+              >
+                <Link to={`/blog/${blog.slug}`} className="">
+                  <h1 className="text-xl font-bold">{blog.title}</h1>
+                  <p>{blog.description}</p>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   )
 }
