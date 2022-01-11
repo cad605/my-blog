@@ -25,7 +25,7 @@ export default function Index() {
           I'm a software engineer living in New York City.
         </div>
         <div className="text-3xl md:text-5xl text-slate-600 animate-[slide_2s_ease-in-out]">
-          I often like to write about programming, the web, and other topics I'm
+          I often write about programming, the web, and other topics I'm
           learning about.
         </div>
       </section>
@@ -51,15 +51,18 @@ export default function Index() {
               ></path>
             </svg>
           </Link>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 place-content-center">
+          <p className="text-slate-600">Some recent ideas</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 place-content-center mt-2">
             {blogListItems.map(blog => (
               <div
                 key={blog.slug}
-                className="border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm"
+                className="group border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm transition ease-in-out delay-100 hover:-translate-y-2 duration-300"
               >
-                <Link to={`/blog/${blog.slug}`} className="">
-                  <h1 className="text-xl font-bold">{blog.title}</h1>
-                  <p>{blog.description}</p>
+                <Link prefetch="intent" to={`/blog/${blog.slug}`} className="">
+                  <h1 className="text-xl font-bold group-hover:underline">
+                    {blog.title}
+                  </h1>
+                  <p className="text-slate-600">{blog.description}</p>
                 </Link>
               </div>
             ))}

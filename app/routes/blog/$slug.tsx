@@ -1,67 +1,50 @@
-import {useLoaderData} from 'remix'
-import type {LoaderFunction} from 'remix'
+import type {LoaderFunction, ActionFunction, MetaFunction} from 'remix'
+import {Link, useLoaderData, useCatch, redirect, useParams} from 'remix'
+import type {Blog} from '@prisma/client'
+import {db} from '~/utils/db.server'
 import invariant from 'tiny-invariant'
 import fm from 'front-matter'
 import {marked} from 'marked'
 
-export const loader: LoaderFunction = async ({params}) => {
-  const data = [
-    {
-      slug: 1,
-      title: 'My First Post',
-      description: 'My first post on my new website!',
-      markdown: `
-      ---title: Twitter Clone with Raft---
-      
-      # Raft: Simple Twitter Clone"
-      
-      This is a simple Twitter clone that implements its distributed SQLite database using Hashicorp's implmentation of Raft.
-      SQLite implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine. SQLite is the most used database engine in the world. SQLite is built into all mobile phones and most computers and comes bundled inssluge countless other applications that people use every day.
-But it isn't distributed! That's where Raft comes in...
-`,
-    },
-    {
-      slug: 2,
-      title: 'My Second Post',
-      description: 'My second post on my new website!',
-      markdown: `
-      ---title: Twitter Clone with Raft---
-      # Raft: Simple Twitter Clone"
-      This is a simple Twitter clone that implements its distributed SQLite database using Hashicorp's implmentation of Raft.
-      SQLite implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine. SQLite is the most used database engine in the world. SQLite is built into all mobile phones and most computers and comes bundled inssluge countless other applications that people use every day.
-But it isn't distributed! That's where Raft comes in...
-`,
-    },
-    {
-      slug: 3,
-      title: 'My Third Post',
-      description: 'My third post on my new website!',
-      markdown: `
+type LoaderData = {blog: Blog; html: string}
 
-      ---
-title: 90s Mixtape
----
-
-# 90s Mixtape
-
-- I wish (Skee-Lo)
-- This Is How We Do It (Montell Jordan)
-- Everlong (Foo Fighters)
-      
-      `,
-    },
-  ]
+// export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
+//   if (!data) {
+//     return {
+//       title: 'No blog',
+//       description: 'No blog found',
+//     }
+//   }
+//   return {
+//     title: `"${data.blog.title}"`,
+//     description: `Enjoy the post about"${data.blog.title}" and much more`,
+//   }
+// }
+export const loader: LoaderFunction = async ({request, params}) => {
   invariant(params.slug, 'expected params.slug')
-  const {body} = fm(data[2].markdown)
+  const slug = params.slug
+  const blog = await db.blog.findUnique({
+    where: {slug},
+  })
+  if (!blog) {
+    throw new Response(`Oops, didn't find that blog post.`, {
+      status: 404,
+    })
+  }
+
+  const {body} = fm(blog.markdown)
   const html = marked(body)
-  return html
+  return {...blog, html}
 }
 
 export default function PostSlug() {
-  const markdown = useLoaderData()
+  const blog = useLoaderData()
   return (
-    <article className="mt-16 mx-auto prose prose-slate">
-      <div dangerouslySetInnerHTML={{__html: markdown}}></div>
+    <article className="mt-6 mx-auto prose prose-slate">
+      <h1>{blog.title}</h1>
+      <p>{blog.description}</p>
+      <hr></hr>
+      <div dangerouslySetInnerHTML={{__html: blog.html}}></div>
     </article>
   )
 }
