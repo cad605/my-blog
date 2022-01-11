@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Canela Deck';
+    font-weight: 400;
+    src: url(/fonts/canela/CanelaDeck-Regular.woff2) format('woff2');
+  }
+  @font-face {
+    font-family: 'Canela Deck';
+    font-weight: 700;
+    src: url(/fonts/canela/CanelaDeck-Bold.woff2) format('woff2');
+  }
+  @font-face {
+    font-family: 'Canela Deck';
+    font-weight: 300;
+    src: url(/fonts/canela/CanelaDeck-Light.woff2) format('woff2');
+  }
+  @font-face {
+    font-family: 'Canela Text';
+    font-weight: 300;
+    src: url(/fonts/canela/CanelaText-Light.woff2) format('woff2');
+  }
+}
