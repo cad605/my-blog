@@ -3,7 +3,24 @@
 @tailwind utilities;
 
 @layer base {
-  @font-face {
+  [type='text'],
+  [type='email'],
+  [type='url'],
+  [type='password'],
+  [type='number'],
+  [type='date'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='week'],
+  [multiple],
+  textarea,
+  select {
+    @apply w-full border border-slate-600 rounded-sm px-3 py-2 focus:outline-none focus:border-zinc-800 focus:ring-1 focus:ring-zinc-800;
+  }
+  /* @font-face {
     font-family: 'Canela Deck';
     font-weight: 400;
     src: url(/fonts/canela/CanelaDeck-Regular.woff2) format('woff2');
@@ -22,5 +39,5 @@
     font-family: 'Canela Text';
     font-weight: 300;
     src: url(/fonts/canela/CanelaText-Light.woff2) format('woff2');
-  }
+  } */
 }

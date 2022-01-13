@@ -38,7 +38,7 @@ if (!sessionSecret) {
 
 const storage = createCookieSessionStorage({
   cookie: {
-    name: 'RJ_session',
+    name: 'CDBlog_session',
     secure: process.env.NODE_ENV === 'production',
     secrets: [sessionSecret],
     sameSite: 'lax',
@@ -83,7 +83,7 @@ export async function requireUserId(
 
 export async function logout(request: Request) {
   const session = await getUserSession(request)
-  return redirect(`/jokes`, {
+  return redirect(`/`, {
     headers: {
       'Set-Cookie': await storage.destroySession(session),
     },

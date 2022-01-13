@@ -1,10 +1,17 @@
-import type {LoaderFunction} from 'remix'
+import type {LoaderFunction, MetaFunction} from 'remix'
 import {Link, useLoaderData} from 'remix'
 import {Blog} from '@prisma/client'
 import {db} from '~/utils/db.server'
 
 type LoaderData = {
   blogListItems: Array<Blog>
+}
+
+export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
+  return {
+    title: `Chris Donnelly | Home`,
+    description: `Chris Donnelly's Personal Website`,
+  }
 }
 
 export const loader: LoaderFunction = async ({params}) => {
@@ -22,7 +29,7 @@ export default function Index() {
           Hey there, I'm <span className="underline">Chris</span>.
         </h1>
         <div className="text-3xl md:text-5xl text-slate-600 mb-6 animate-[slide_1.5s_ease-in-out]">
-          I'm a software engineer living in New York City.
+          I'm a software engineer living in New York.
         </div>
         <div className="text-3xl md:text-5xl text-slate-600 animate-[slide_2s_ease-in-out]">
           I often write about programming, the web, and other topics I'm
@@ -30,43 +37,41 @@ export default function Index() {
         </div>
       </section>
       <section className="animate-[slide_2.5s_ease-in-out]">
-        <div className="">
-          <Link
-            to="/blog"
-            className="text-2xl md:text-3xl text-zinc-800 font-bold group hover:underline"
+        <Link
+          to="/blog"
+          className="text-2xl md:text-3xl text-zinc-800 font-bold group hover:underline"
+        >
+          Blog
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            width="18"
+            height="18"
+            className="inline-block group-hover:translate-x-2 transition duration-300"
           >
-            Blog
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              width="18"
-              height="18"
-              className="inline-block group-hover:translate-x-2 transition duration-300"
+            <path
+              fillRule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+        </Link>
+        <p className="text-slate-600">Some recent ideas</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 place-content-center mt-2">
+          {blogListItems.map(blog => (
+            <div
+              key={blog.slug}
+              className="group border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm transition ease-in-out delay-100 hover:-translate-y-2 duration-300"
             >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </Link>
-          <p className="text-slate-600">Some recent ideas</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 place-content-center mt-2">
-            {blogListItems.map(blog => (
-              <div
-                key={blog.slug}
-                className="group border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm transition ease-in-out delay-100 hover:-translate-y-2 duration-300"
-              >
-                <Link prefetch="intent" to={`/blog/${blog.slug}`} className="">
-                  <h1 className="text-xl font-bold group-hover:underline">
-                    {blog.title}
-                  </h1>
-                  <p className="text-slate-600">{blog.description}</p>
-                </Link>
-              </div>
-            ))}
-          </div>
+              <Link prefetch="intent" to={`/blog/${blog.slug}`} className="">
+                <h1 className="text-xl font-bold group-hover:underline">
+                  {blog.title}
+                </h1>
+                <p className="text-slate-600">{blog.description}</p>
+              </Link>
+            </div>
+          ))}
         </div>
       </section>
     </main>

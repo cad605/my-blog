@@ -1,19 +1,13 @@
 import {PrismaClient} from '@prisma/client'
+import {register} from '~/utils/session.server'
 const prisma = new PrismaClient()
 
 async function seed() {
-  const kody = await prisma.user.create({
-    data: {
-      username: 'kody',
-      // this is a hashed version of "twixrox"
-      passwordHash:
-        '$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u',
-    },
-  })
+  const user = await register({username: 'cdonnelly', password: 'farewell10c!'})
 
   await Promise.all(
     getBlog().map(blog => {
-      const data = {userId: kody.id, ...blog}
+      const data = {userId: user.id, ...blog}
       return prisma.blog.create({data})
     }),
   )
@@ -31,7 +25,9 @@ function getBlog() {
       ---
       title: Twitter Clone with Raft
       ---
+      
       # Raft: Simple Twitter Clone"
+      
       This is a simple Twitter clone that implements its distributed SQLite database using Hashicorp's implmentation of Raft.
       SQLite implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine. SQLite is the most used database engine in the world. SQLite is built into all mobile phones and most computers and comes bundled inssluge countless other applications that people use every day.
 But it isn't distributed! That's where Raft comes in...
@@ -45,7 +41,9 @@ But it isn't distributed! That's where Raft comes in...
       ---
       title: Twitter Clone with Raft
       ---
-      # Raft: Simple Twitter Clone"
+      
+      ## Raft: Simple Twitter Clone"
+      
       This is a simple Twitter clone that implements its distributed SQLite database using Hashicorp's implmentation of Raft.
       SQLite implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine. SQLite is the most used database engine in the world. SQLite is built into all mobile phones and most computers and comes bundled inssluge countless other applications that people use every day.
 But it isn't distributed! That's where Raft comes in...
@@ -75,7 +73,7 @@ title: 90s Mixtape
       description: 'My fourth post on my new website!',
       markdown: `
 
-      ---
+---
 title: 90s Mixtape
 ---
 

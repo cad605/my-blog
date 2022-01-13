@@ -14,7 +14,7 @@ export default function Nav() {
   return (
     <header className="mb-8 animate-appear">
       <div className="flex flex-col items-center pl-6 border-b-8 border-zinc-800 md:flex-row md:items-stretch">
-        <div className="bg-gradient-to-tr from-slate-400 to-zinc-800 m-2 p-1 rounded-full">
+        <div className="bg-gradient-to-tr from-slate-200 to-zinc-800 m-2 p-1 rounded-full">
           <Link
             prefetch="intent"
             to="/"

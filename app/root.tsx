@@ -17,7 +17,7 @@ export function links() {
 }
 
 export const meta: MetaFunction = () => {
-  const description = `Learn Remix and laugh at the same time!`
+  const description = `I write about programming, the web, and other topics I'm learning about`
   return {
     description,
     keywords: 'Christopher,Donnelly,blog',
@@ -25,14 +25,14 @@ export const meta: MetaFunction = () => {
     'twitter:card': 'summary_large_image',
     'twitter:creator': '@cdonnelly402',
     'twitter:site': '@cdonnelly402',
-    'twitter:title': "Chris Donnelly's Blog",
+    'twitter:title': "Chris Donnelly's Personal Website",
     'twitter:description': description,
   }
 }
 
 function Document({
   children,
-  title = `Personal Blog of Chris Donnelly.`,
+  title = `Chris Donnelly`,
 }: {
   children: React.ReactNode
   title?: string
