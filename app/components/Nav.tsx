@@ -13,7 +13,7 @@ export default function Nav() {
 
   return (
     <header className="mb-8 animate-appear">
-      <div className="flex flex-col items-center pl-6 border-b-8 border-zinc-800 md:flex-row md:items-stretch">
+      <div className="flex flex-col items-center pl-6 border-b-8 border-zinc-800 sm:flex-row sm:items-stretch">
         <div className="bg-gradient-to-tr from-slate-200 to-zinc-800 m-2 p-1 rounded-full">
           <Link
             prefetch="intent"
@@ -25,11 +25,11 @@ export default function Nav() {
             </h1>
           </Link>
         </div>
-        <nav className="m-4 flex-1 flex flex-wrap justify-center md:m-0 md:justify-end">
+        <nav className="m-4 flex-1 flex flex-wrap justify-center sm:m-0 sm:justify-end">
           {navLinks.map(link => (
             <Link
               prefetch="intent"
-              className="flex items-center relative group px-4 text-sm uppercase flex-shrink-0 md:px-8 md:text-xl"
+              className="flex items-center relative group px-4 text-sm uppercase flex-shrink-0 sm:px-8 sm:text-xl"
               key={link.name}
               to={link.target}
             >

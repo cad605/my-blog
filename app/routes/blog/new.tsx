@@ -78,7 +78,9 @@ export default function NewPost() {
 
   return (
     <div className="mt-6 sm:mx-auto sm:w-full">
-      <div className="py-8 px-6 sm:px-10 border-2 border-slate-600 p-4 rounded-xl">
+      <h1 className="text-zinc-800 text-4xl font-bold mb-4">New Post</h1>
+      <hr></hr>
+      <div className="py-8 px-6 sm:px-10 ">
         <Form method="post" className="space-y-4">
           <div>
             <label className="block text-xl text-zinc-800 font-medium">
@@ -176,7 +178,7 @@ export default function NewPost() {
           <div>
             <button
               type="submit"
-              className="transfrom hover:-translate-y-1 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-600 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-800 focus:bg-zinc-800"
+              className="transfrom hover:-translate-y-1 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-zinc-800 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 focus:bg-slate-600"
             >
               {transition.submission ? 'Creating Post...' : 'Post Blog'}
             </button>

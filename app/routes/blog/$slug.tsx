@@ -34,7 +34,7 @@ export const loader: LoaderFunction = async ({request, params}) => {
     })
   }
 
-  const {attributes, body} = fm(blog.markdown)
+  const {body} = fm(blog.markdown)
   const html = marked(body)
   return {blog, html}
 }
@@ -42,17 +42,17 @@ export const loader: LoaderFunction = async ({request, params}) => {
 export default function PostSlug() {
   const {blog, html} = useLoaderData()
   return (
-    <div className="grid grid-cols-12">
-      <div className="col-start-1 col-span-12 space-y-4">
-        <h1 className="text-6xl md:text-8xl text-zinc-800 font-bold">
-          {blog.title}
-        </h1>
-        <p className="text-4xl md:text-6xl text-slate-600">
-          {blog.description}
-        </p>
-        <hr className="border-slate-200"></hr>
-      </div>
-      <article className="col-start-1 col-span-12 prose prose-zinc">
+    <div className="flex flex-col items-center">
+      <article className="items-center prose prose-zinc">
+        <div className="space-y-4">
+          <h1 className="text-4xl md:text-5xl text-zinc-800 font-bold">
+            {blog.title}
+          </h1>
+          <p className="text-xl md:text-2xl text-slate-600">
+            {blog.description}
+          </p>
+          <hr className="border-slate-200"></hr>
+        </div>
         <div dangerouslySetInnerHTML={{__html: html}}></div>
       </article>
     </div>

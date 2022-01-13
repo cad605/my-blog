@@ -15,7 +15,12 @@ export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
 }
 
 export const loader: LoaderFunction = async ({params}) => {
-  const data: LoaderData = {blogListItems: await db.blog.findMany({take: 5})}
+  const data: LoaderData = {
+    blogListItems: await db.blog.findMany({
+      take: 4,
+      orderBy: [{updatedAt: 'desc'}],
+    }),
+  }
   return data
 }
 
@@ -37,34 +42,40 @@ export default function Index() {
         </div>
       </section>
       <section className="animate-[slide_2.5s_ease-in-out]">
-        <Link
-          to="/blog"
-          className="text-2xl md:text-3xl text-zinc-800 font-bold group hover:underline"
-        >
-          Blog
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            width="18"
-            height="18"
-            className="inline-block group-hover:translate-x-2 transition duration-300"
+        <div className="space-y-4">
+          <Link
+            to="/blog"
+            className="text-2xl md:text-3xl text-zinc-800 font-bold group hover:underline"
           >
-            <path
-              fillRule="evenodd"
-              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            ></path>
-          </svg>
-        </Link>
-        <p className="text-slate-600">Some recent ideas</p>
+            Blog
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              width="18"
+              height="18"
+              className="inline-block group-hover:translate-x-2 transition duration-300"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+          </Link>
+          <p className="text-slate-600">Some recent thoughts</p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 place-content-center mt-2">
           {blogListItems.map(blog => (
             <div
               key={blog.slug}
-              className="group border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm transition ease-in-out delay-100 hover:-translate-y-2 duration-300"
+              className="group border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm transition ease-in-out delay-100 hover:-translate-y-2 duration-300 hover:shadow-sm"
             >
-              <Link prefetch="intent" to={`/blog/${blog.slug}`} className="">
+              <Link
+                prefetch="intent"
+                to={`/blog/${blog.slug}`}
+                className="space-y-4"
+              >
                 <h1 className="text-xl font-bold group-hover:underline">
                   {blog.title}
                 </h1>
