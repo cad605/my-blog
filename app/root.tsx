@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
+  useMatches,
 } from 'remix'
 import type {MetaFunction} from 'remix'
 
@@ -46,11 +47,16 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
-      <body className="bg-bland w-screen h-screen">
-        <Nav></Nav>
-        <div className="h-max max-w-5xl mx-auto p-12">{children}</div>
-        <Scripts />
+      <body className="flex flex-col w-screen h-screen bg-bland">
+        <header className="flex-none">
+          <Nav></Nav>
+        </header>
+        <main className="grow max-w-5xl mx-auto p-12">{children}</main>
+        <footer className="flex-none border border-t-2 h-40">
+          <div></div>
+        </footer>
         <ScrollRestoration />
+        <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>
     </html>
@@ -58,8 +64,19 @@ function Document({
 }
 
 export default function App() {
+  const matches = useMatches()
+
   return (
     <Document>
+      <ol className="mb-6 animate-[slide_0.75s_ease-in-out]">
+        {matches
+          // skip routes that don't have a breadcrumb
+          .filter(match => match.handle && match.handle.breadcrumb)
+          // render breadcrumbs!
+          .map((match, index) => (
+            <li key={index}>{match.handle.breadcrumb(match)}</li>
+          ))}
+      </ol>
       <Outlet />
     </Document>
   )

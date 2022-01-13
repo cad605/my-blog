@@ -72,16 +72,46 @@ export const action: ActionFunction = async ({request}) => {
   return redirect(`/blog/${blog.slug}`)
 }
 
+export const handle = {
+  breadcrumb: () => {
+    return (
+      <Link
+        to={`/blog`}
+        className="text-zinc-800 font-medium group hover:underline animate-[slide_1s_ease-in-out]"
+      >
+        {' '}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          width="16"
+          height="16"
+          className="inline-block group-hover:-translate-x-1 transition duration-300"
+        >
+          <path
+            fillRule="evenodd"
+            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+            clipRule="evenodd"
+          ></path>
+        </svg>
+        Blog
+      </Link>
+    )
+  },
+}
+
 export default function NewPost() {
   const actionData = useActionData<ActionData>()
   const transition = useTransition()
 
   return (
-    <div className="mt-6 sm:mx-auto sm:w-full">
-      <h1 className="text-zinc-800 text-4xl font-bold mb-4">New Post</h1>
+    <div>
+      <section className="md:relative mb-4 sm:flex sm:flex-col space-y-4">
+        <h1 className="text-zinc-800 text-4xl font-bold">New Post</h1>
+      </section>
       <hr></hr>
-      <div className="py-8 px-6 sm:px-10 ">
-        <Form method="post" className="space-y-4">
+      <section>
+        <Form method="post" className="mt-4 space-y-4">
           <div>
             <label className="block text-xl text-zinc-800 font-medium">
               Title:{' '}
@@ -97,7 +127,6 @@ export default function NewPost() {
                 required={true}
                 defaultValue={actionData?.fields?.title}
                 name="title"
-                aria-role={'title-input'}
                 aria-required={true}
                 aria-invalid={
                   Boolean(actionData?.fieldErrors?.title) || undefined
@@ -123,7 +152,6 @@ export default function NewPost() {
                 required={true}
                 defaultValue={actionData?.fields?.slug}
                 name="slug"
-                aria-role={'slug-input'}
                 aria-required={true}
                 aria-invalid={
                   Boolean(actionData?.fieldErrors?.slug) || undefined
@@ -149,7 +177,6 @@ export default function NewPost() {
                 required={true}
                 defaultValue={actionData?.fields?.description}
                 name="description"
-                aria-role={'description-input'}
                 aria-required={true}
                 aria-invalid={
                   Boolean(actionData?.fieldErrors?.description) || undefined
@@ -172,19 +199,16 @@ export default function NewPost() {
             {actionData?.fieldErrors?.markdown ? (
               <em>Markdown is required</em>
             ) : null}
-            <br />
-            <textarea id="markdown" rows={20} name="markdown" />
+            <textarea id="markdown" cols={60} rows={10} name="markdown" />
           </div>
-          <div>
-            <button
-              type="submit"
-              className="transfrom hover:-translate-y-1 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-zinc-800 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 focus:bg-slate-600"
-            >
-              {transition.submission ? 'Creating Post...' : 'Post Blog'}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="transfrom hover:-translate-y-1 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-zinc-800 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 focus:bg-slate-600"
+          >
+            {transition.submission ? 'Creating Post...' : 'Post Blog'}
+          </button>
         </Form>
-      </div>
+      </section>
     </div>
   )
 }

@@ -28,7 +28,7 @@ export default function Index() {
   const {blogListItems} = useLoaderData<LoaderData>()
 
   return (
-    <main className="flex flex-col">
+    <div className="flex flex-col">
       <section className="mb-12">
         <h1 className="text-4xl md:text-6xl text-zinc-800 font-bold mb-6 animate-[slide_1s_ease-in-out]">
           Hey there, I'm <span className="underline">Chris</span>.
@@ -37,7 +37,7 @@ export default function Index() {
           I'm a software engineer living in New York.
         </div>
         <div className="text-3xl md:text-5xl text-slate-600 animate-[slide_2s_ease-in-out]">
-          I often write about programming, the web, and other topics I'm
+          I often write about programming, the web, and other things I'm
           learning about.
         </div>
       </section>
@@ -85,6 +85,6 @@ export default function Index() {
           ))}
         </div>
       </section>
-    </main>
+    </div>
   )
 }
