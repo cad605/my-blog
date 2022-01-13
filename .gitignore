@@ -6,5 +6,5 @@ node_modules
 /app/tailwind.css
 
 /prisma/dev.db
-/prism/seed.ts
+/prisma/seed.ts
 .env
