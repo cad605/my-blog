@@ -42,7 +42,7 @@ export default function Index() {
         </div>
       </section>
       <section className="animate-[slide_2.5s_ease-in-out]">
-        <div className="space-y-4">
+        <div className="space-y-2">
           <Link
             to="/blog"
             className="text-2xl md:text-3xl text-zinc-800 font-bold group hover:underline"

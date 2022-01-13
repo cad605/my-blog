@@ -60,20 +60,24 @@ export default function BlogIndexRoute() {
 
   return (
     <div>
-      <section className="md:relative mb-4 sm:flex sm:flex-col space-y-4">
-        <h1 className="text-zinc-800 text-4xl font-bold animate-[slide_1s_ease-in-out]">
-          Blog
-        </h1>
-        <p className="text-slate-600 animate-[slide_1.5s_ease-in-out]">
-          Ideas about programming and the web, amongst other things.
-        </p>
+      <section className="mb-4 sm:flex sm:flex-row sm:space-x-6 space-y-6">
+        <div className="flex flex-col space-y-2">
+          <h1 className="text-zinc-800 text-4xl font-bold animate-[slide_1s_ease-in-out]">
+            Blog
+          </h1>
+          <p className="text-slate-600 animate-[slide_1.5s_ease-in-out]">
+            Ideas about programming and the web, amongst other things.
+          </p>
+        </div>
         {isOwner ? (
-          <Link
-            className="font-base md:absolute md:bottom-0 md:right-0 transfrom hover:-translate-y-1 flex justify-center items-center py-2 px-4 border border-transparent rounded-sm shadow-sm text-base font-medium text-white bg-zinc-800 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 focus:bg-slate-600 animate-[slide_1.5s_ease-in-out]"
-            to="/blog/new"
-          >
-            New Post
-          </Link>
+          <div className="flex flex-col ">
+            <Link
+              className="font-base transfrom hover:-translate-y-1 flex justify-center items-center py-2 px-4 border border-transparent rounded-sm shadow-sm text-base font-medium text-white bg-zinc-800 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 focus:bg-slate-600 animate-[slide_1.5s_ease-in-out]"
+              to="/blog/new"
+            >
+              New Post
+            </Link>
+          </div>
         ) : null}
       </section>
       <section>
