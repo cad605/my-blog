@@ -41,15 +41,15 @@ export default function About() {
           <p>
             I'm a full-stack software engineer, and over the past few years I've
             worked in a variety of different fields, from commerical real estate
-            to accounting, and for a variety of different firms such as Savills,
-            KPMG, and NYU.
+            to accounting, and have helped build digital products for a variety
+            of different firms such as Savills, KPMG, and NYU.
           </p>
           <p>
             I originally grew up in the suburbs of New York, and I currently
-            live in the East Village. I spent three years doing my undergraduate
-            degree at Boston College, where I studied finance and information
-            systems, and I recently completed my master's degree in computer
-            science from New York University.
+            live in the East Village. I spent three years completing my
+            undergraduate degree at Boston College, where I studied finance and
+            information systems, and I recently received my master's degree in
+            computer science from New York University.
           </p>
           <p>
             On this site, I write about technology that I'm learning about or

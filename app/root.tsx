@@ -1,4 +1,5 @@
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -12,6 +13,7 @@ import type {MetaFunction} from 'remix'
 
 import tailwind from './tailwind.css'
 import Nav from './components/Nav'
+import Footer from './components/Footer'
 
 export function links() {
   return [{rel: 'stylesheet', href: tailwind}]
@@ -47,14 +49,12 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
-      <body className="flex flex-col w-screen h-screen bg-bland">
+      <body className="flex flex-col w-screen h-screen bg-bland space-y-2">
         <header className="flex-none">
           <Nav></Nav>
         </header>
         <main className="grow max-w-5xl mx-auto p-12">{children}</main>
-        <footer className="flex-none border border-t-2 h-40">
-          <div></div>
-        </footer>
+        <Footer></Footer>
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
@@ -70,9 +70,7 @@ export default function App() {
     <Document>
       <ol className="mb-6 animate-[slide_0.75s_ease-in-out]">
         {matches
-          // skip routes that don't have a breadcrumb
           .filter(match => match.handle && match.handle.breadcrumb)
-          // render breadcrumbs!
           .map((match, index) => (
             <li key={index}>{match.handle.breadcrumb(match)}</li>
           ))}
