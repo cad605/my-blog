@@ -3,8 +3,6 @@ import {Link, useLoaderData, useCatch, redirect, useParams} from 'remix'
 import type {Blog} from '@prisma/client'
 import {db} from '~/utils/db.server'
 import invariant from 'tiny-invariant'
-import fm from 'front-matter'
-import {marked} from 'marked'
 
 type LoaderData = {blog: Blog; html: string}
 
@@ -33,10 +31,7 @@ export const loader: LoaderFunction = async ({request, params}) => {
       status: 404,
     })
   }
-
-  const {body} = fm(blog.markdown)
-  const html = marked(body)
-  return {blog, html}
+  return {blog}
 }
 
 export const handle = {
@@ -68,7 +63,7 @@ export const handle = {
 }
 
 export default function PostSlug() {
-  const {blog, html} = useLoaderData()
+  const {blog} = useLoaderData()
   return (
     <article className="prose prose-zinc">
       <div className="space-y-4">
@@ -76,7 +71,7 @@ export default function PostSlug() {
         <p className="text-xl md:text-2xl text-slate-600">{blog.description}</p>
         <hr></hr>
       </div>
-      <div dangerouslySetInnerHTML={{__html: html}}></div>
+      <div dangerouslySetInnerHTML={{__html: blog.html}}></div>
     </article>
   )
 }

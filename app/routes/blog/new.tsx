@@ -11,6 +11,8 @@ import type {ActionFunction, LoaderFunction} from 'remix'
 import invariant from 'tiny-invariant'
 import {db} from '~/utils/db.server'
 import {requireUserId, getUserId} from '~/utils/session.server'
+import fm from 'front-matter'
+import {marked} from 'marked'
 
 export const loader: LoaderFunction = async ({request}) => {
   const userId = await requireUserId(request)
@@ -30,6 +32,7 @@ type ActionData = {
     title: string
     description: string
     markdown: string
+    html: string
   }
 }
 
@@ -61,7 +64,10 @@ export const action: ActionFunction = async ({request}) => {
   invariant(typeof description === 'string')
   invariant(typeof markdown === 'string')
 
-  const fields = {slug, title, description, markdown}
+  const {body} = fm(markdown)
+  const html = marked(body)
+
+  const fields = {slug, title, description, markdown, html}
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({fieldErrors, fields})
   }
