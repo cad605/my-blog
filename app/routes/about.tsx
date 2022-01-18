@@ -63,7 +63,12 @@ export default function About() {
             On this site, I write about technology that I'm learning about or
             just find interesting. Aside from tinkering with computers, I love
             soccer, hiking, reading, and traveling (which I hope to be able to
-            do again soon 🥲). Thanks for checking out my site!
+            do again soon 🥲).
+          </p>
+          <p>
+            While I don't maintain a large social media presence, if you do wish
+            to contact me, you can find my social profiles in the footer below.
+            Thanks for checking out my site!
           </p>
         </div>
       </article>

@@ -10,19 +10,19 @@ import {
 import type {ActionFunction, LoaderFunction} from 'remix'
 import invariant from 'tiny-invariant'
 import {db} from '~/utils/db.server'
-import {requireUserId, getUserId} from '~/utils/session.server'
+import {requireUserId} from '~/utils/session.server'
+import slugify from 'slugify'
 import fm from 'front-matter'
 import {marked} from 'marked'
 
 export const loader: LoaderFunction = async ({request}) => {
-  const userId = await requireUserId(request)
+  await requireUserId(request)
   return {}
 }
 
 type ActionData = {
   formError?: string
   fieldErrors?: {
-    slug: boolean | undefined
     title: boolean | undefined
     description: boolean | undefined
     markdown: boolean | undefined
@@ -42,29 +42,26 @@ export const action: ActionFunction = async ({request}) => {
   const userId = await requireUserId(request)
   const formData = await request.formData()
 
-  const slug = formData.get('slug')
   const title = formData.get('title')
   const description = formData.get('description')
   const markdown = formData.get('markdown')
 
   const fieldErrors = {
-    slug: false,
     title: false,
     description: false,
     markdown: false,
   }
 
-  if (!slug) fieldErrors.slug = true
   if (!title) fieldErrors.title = true
   if (!title) fieldErrors.description = true
   if (!markdown) fieldErrors.markdown = true
 
-  invariant(typeof slug === 'string')
   invariant(typeof title === 'string')
   invariant(typeof description === 'string')
   invariant(typeof markdown === 'string')
 
-  const {body} = fm(markdown)
+  const slug = slugify(title)
+  const {body} = fm(`---\ntitle: ${title}\n---\n\n${markdown}`)
   const html = marked(body)
 
   const fields = {slug, title, description, markdown, html}
@@ -75,6 +72,7 @@ export const action: ActionFunction = async ({request}) => {
   const blog = await db.blog.create({
     data: {...fields, userId: userId},
   })
+
   return redirect(`/blog/${blog.slug}`)
 }
 
@@ -139,31 +137,6 @@ export default function NewPost() {
                 }
                 aria-describedby={
                   actionData?.fieldErrors?.title ? 'title-error' : undefined
-                }
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-xl text-zinc-800 font-medium">
-              Slug:{' '}
-              {actionData?.fieldErrors?.slug ? (
-                <em role="alert" id="name-error">
-                  Slug is required
-                </em>
-              ) : null}
-            </label>
-            <div>
-              <input
-                type="text"
-                required={true}
-                defaultValue={actionData?.fields?.slug}
-                name="slug"
-                aria-required={true}
-                aria-invalid={
-                  Boolean(actionData?.fieldErrors?.slug) || undefined
-                }
-                aria-describedby={
-                  actionData?.fieldErrors?.slug ? 'slug-error' : undefined
                 }
               />
             </div>
