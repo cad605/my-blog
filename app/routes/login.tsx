@@ -20,7 +20,7 @@ import {
 
 export const meta: MetaFunction = () => {
   return {
-    title: 'Chris Donnelly | Login',
+    title: 'Christopher Donnelly | Login',
     description: 'Login to my personal site',
   }
 }

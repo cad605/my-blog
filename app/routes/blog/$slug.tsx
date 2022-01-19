@@ -15,8 +15,8 @@ export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
   }
 
   return {
-    title: `Chris Donnelly | ${data.blog.title}`,
-    description: `Enjoy the post about ${data.blog.title}!`,
+    title: `Christopher Donnelly | ${data.blog.title}`,
+    description: `${data.blog.description}!`,
   }
 }
 

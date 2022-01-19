@@ -3,8 +3,8 @@ import type {MetaFunction} from 'remix'
 
 export const meta: MetaFunction = () => {
   return {
-    title: `Chris Donnelly | About`,
-    description: `Chris Donnelly's Personal Website`,
+    title: `Christopher Donnelly | About`,
+    description: `About Christopher Donnelly`,
   }
 }
 

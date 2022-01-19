@@ -11,8 +11,8 @@ type LoaderData = {
 
 export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
   return {
-    title: `Chris Donnelly | Blog`,
-    description: `Enjoy the blog!`,
+    title: `Christopher Donnelly | Blog`,
+    description: `Personal blog of Christopher Donnelly`,
   }
 }
 
@@ -60,7 +60,7 @@ export default function BlogIndexRoute() {
 
   return (
     <div>
-      <section className="mb-4 sm:flex sm:flex-row sm:space-x-6 space-y-6">
+      <section className="md:relative mb-4 sm:flex sm:flex-col sm:space-x-6 space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-zinc-800 text-4xl font-bold animate-[slide_1s_ease-in-out]">
             Blog
@@ -72,7 +72,7 @@ export default function BlogIndexRoute() {
         {isOwner ? (
           <div className="flex flex-col ">
             <Link
-              className="font-base transfrom hover:-translate-y-1 flex justify-center items-center py-2 px-4 border border-transparent rounded-sm shadow-sm text-base font-medium text-white bg-zinc-800 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 focus:bg-slate-600 animate-[slide_1.5s_ease-in-out]"
+              className="md:absolute md:right-0 md:top-0 font-base transfrom hover:-translate-y-1 flex justify-center items-center py-2 px-4 border border-transparent rounded-sm shadow-sm text-base font-medium text-white bg-zinc-800 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 focus:bg-slate-600 animate-[slide_1.5s_ease-in-out]"
               to="/blog/new"
             >
               New Post

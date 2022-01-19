@@ -9,8 +9,8 @@ type LoaderData = {
 
 export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
   return {
-    title: `Chris Donnelly | Home`,
-    description: `Chris Donnelly's Personal Website`,
+    title: `Christopher Donnelly | Home`,
+    description: `Christopher Donnelly's Personal Website`,
   }
 }
 
