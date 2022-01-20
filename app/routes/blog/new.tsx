@@ -14,7 +14,7 @@ import {requireUserId} from '~/utils/session.server'
 import slugify from 'slugify'
 import fm from 'front-matter'
 import {marked} from 'marked'
-import ArrowButton from '~/components/ArrowButton'
+import ArrowButton from '~/components/arrow-button'
 
 export const loader: LoaderFunction = async ({request}) => {
   await requireUserId(request)

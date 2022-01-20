@@ -16,7 +16,7 @@ import slugify from 'slugify'
 import fm from 'front-matter'
 import {marked} from 'marked'
 import {Blog} from '@prisma/client'
-import ArrowButton from '~/components/ArrowButton'
+import ArrowButton from '~/components/arrow-button'
 
 type LoaderData = {blog: Blog}
 

@@ -3,7 +3,7 @@ import {Link, useLoaderData, useCatch} from 'remix'
 import {Blog, User} from '@prisma/client'
 import {db} from '~/utils/db.server'
 import {getUserId} from '~/utils/session.server'
-import ArrowButton from '~/components/ArrowButton'
+import ArrowButton from '~/components/arrow-button'
 
 type LoaderData = {
   blogListItems: Array<Blog>

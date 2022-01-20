@@ -12,8 +12,8 @@ import {
 import type {MetaFunction} from 'remix'
 
 import tailwind from './tailwind.css'
-import Nav from './components/Navbar'
-import Footer from './components/Footer'
+import NavBar from './components/navbar'
+import Footer from './components/footer'
 
 export function links() {
   return [{rel: 'stylesheet', href: tailwind}]
@@ -51,7 +51,7 @@ function Document({
       </head>
       <body className="flex flex-col w-screen h-screen bg-bland space-y-2">
         <header className="flex-none">
-          <Nav></Nav>
+          <NavBar></NavBar>
         </header>
         <main className="grow max-w-5xl mx-auto p-4 sm:p-4 md:p-8 lg:p-12">
           {children}

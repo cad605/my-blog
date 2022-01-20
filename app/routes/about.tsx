@@ -1,6 +1,6 @@
 import {Link, useCatch} from 'remix'
 import type {MetaFunction} from 'remix'
-import ArrowButton from '~/components/ArrowButton'
+import ArrowButton from '~/components/arrow-button'
 
 export const meta: MetaFunction = () => {
   return {

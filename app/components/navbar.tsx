@@ -5,7 +5,7 @@ type NavLink = {
   target: string
 }
 
-export default function Nav() {
+export default function NavBar() {
   const navLinks: Array<NavLink> = [
     {name: 'Blog', target: '/blog'},
     {name: 'About', target: '/about'},
