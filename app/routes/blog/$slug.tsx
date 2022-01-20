@@ -65,16 +65,14 @@ export const handle = {
 export default function PostSlug() {
   const {blog} = useLoaderData()
   return (
-    <div className="flex flex-col items-center">
-      <article className="prose prose-zinc">
-        <div>
-          <h1>{blog.title}</h1>
-          <h2 className="text-slate-600">{blog.description}</h2>
-          <hr className="border-slate-200"></hr>
-        </div>
-        <div dangerouslySetInnerHTML={{__html: blog.html}}></div>
-      </article>
-    </div>
+    <article className="prose prose-zinc max-w-none sm:prose-base md:prose-lg lg:prose-xl">
+      <div>
+        <h1>{blog.title}</h1>
+        <h2 className="text-slate-600">{blog.description}</h2>
+        <hr className="border-slate-200"></hr>
+      </div>
+      <div dangerouslySetInnerHTML={{__html: blog.html}}></div>
+    </article>
   )
 }
 
