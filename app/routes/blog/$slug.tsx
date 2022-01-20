@@ -65,7 +65,7 @@ export const handle = {
 export default function PostSlug() {
   const {blog} = useLoaderData()
   return (
-    <article className="prose prose-zinc prose-sm md:prose-base lg:prose-lg">
+    <article className="max-w-xs sm:max-w-prose prose prose-zinc prose-sm md:prose-base lg:prose-lg">
       <h1>{blog.title}</h1>
       <h2 className="text-slate-600">{blog.description}</h2>
       <hr className="border-slate-200"></hr>
