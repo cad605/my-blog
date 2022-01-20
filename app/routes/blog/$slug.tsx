@@ -3,7 +3,7 @@ import {Link, useLoaderData, useCatch, useParams} from 'remix'
 import type {Blog} from '@prisma/client'
 import {db} from '~/utils/db.server'
 import invariant from 'tiny-invariant'
-import ArrowButton from '~/components/arrow-button'
+import ArrowButton from '~/components/ArrowButton'
 
 type LoaderData = {blog: Blog; html: string}
 

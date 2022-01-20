@@ -2,7 +2,7 @@ import type {LoaderFunction, MetaFunction} from 'remix'
 import {Link, useLoaderData} from 'remix'
 import {Blog} from '@prisma/client'
 import {db} from '~/utils/db.server'
-import ArrowButton from '~/components/arrow-button'
+import ArrowButton from '~/components/ArrowButton'
 
 type LoaderData = {
   blogListItems: Array<Blog>
