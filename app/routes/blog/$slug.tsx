@@ -1,5 +1,5 @@
-import {LoaderFunction, ActionFunction, MetaFunction} from 'remix'
-import {Link, useLoaderData, useCatch, redirect, useParams} from 'remix'
+import type {LoaderFunction, MetaFunction} from 'remix'
+import {Link, useLoaderData, useCatch, useParams} from 'remix'
 import type {Blog} from '@prisma/client'
 import {db} from '~/utils/db.server'
 import invariant from 'tiny-invariant'
@@ -63,7 +63,7 @@ export const handle = {
 }
 
 export default function PostSlug() {
-  const {blog} = useLoaderData()
+  const {blog} = useLoaderData<LoaderData>()
   return (
     <article className="max-w-xs sm:max-w-prose prose prose-zinc prose-sm md:prose-base lg:prose-lg">
       <h1>{blog.title}</h1>

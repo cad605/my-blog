@@ -20,7 +20,7 @@ model User {
 }
 
 model Blog {
-  slug         String   @id @default(uuid())
+  slug       String   @id @default(uuid())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   title      String
