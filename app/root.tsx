@@ -53,7 +53,9 @@ function Document({
         <header className="flex-none">
           <Nav></Nav>
         </header>
-        <main className="grow max-w-5xl mx-auto p-12">{children}</main>
+        <main className="grow max-w-5xl mx-auto p-4 pb-12 sm:p-8 md:p-12">
+          {children}
+        </main>
         <Footer></Footer>
         <ScrollRestoration />
         <Scripts />
