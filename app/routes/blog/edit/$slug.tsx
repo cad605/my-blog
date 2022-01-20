@@ -16,6 +16,7 @@ import slugify from 'slugify'
 import fm from 'front-matter'
 import {marked} from 'marked'
 import {Blog} from '@prisma/client'
+import ArrowButton from '~/components/arrow-button'
 
 type LoaderData = {blog: Blog}
 
@@ -94,27 +95,9 @@ export const action: ActionFunction = async ({request}) => {
 export const handle = {
   breadcrumb: () => {
     return (
-      <Link
-        to={`/blog`}
-        className="text-zinc-800 font-medium group hover:underline animate-[slide_1s_ease-in-out]"
-      >
-        {' '}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          width="16"
-          height="16"
-          className="inline-block group-hover:-translate-x-1 transition duration-300"
-        >
-          <path
-            fillRule="evenodd"
-            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-            clipRule="evenodd"
-          ></path>
-        </svg>
+      <ArrowButton direction="left" href="/blog">
         Blog
-      </Link>
+      </ArrowButton>
     )
   },
 }

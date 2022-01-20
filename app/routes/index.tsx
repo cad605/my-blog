@@ -2,6 +2,7 @@ import type {LoaderFunction, MetaFunction} from 'remix'
 import {Link, useLoaderData} from 'remix'
 import {Blog} from '@prisma/client'
 import {db} from '~/utils/db.server'
+import ArrowButton from '~/components/arrow-button'
 
 type LoaderData = {
   blogListItems: Array<Blog>
@@ -43,26 +44,9 @@ export default function Index() {
       </section>
       <section className="animate-[slide_2.5s_ease-in-out]">
         <div className="space-y-2">
-          <Link
-            to="/blog"
-            className="text-2xl md:text-3xl text-zinc-800 font-bold group hover:underline"
-          >
-            Blog
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              width="18"
-              height="18"
-              className="inline-block group-hover:translate-x-2 transition duration-300"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </Link>
+          <ArrowButton direction="right" href="/blog">
+            <span className="text-2xl md:text-3xl font-bold">Blog</span>
+          </ArrowButton>
           <p className="text-slate-600">Some recent thoughts</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 place-content-center mt-2">

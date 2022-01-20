@@ -12,8 +12,8 @@ import {
 import type {MetaFunction} from 'remix'
 
 import tailwind from './tailwind.css'
-import Nav from './components/Nav'
-import Footer from './components/Footer'
+import Nav from './components/navbar'
+import Footer from './components/footer'
 
 export function links() {
   return [{rel: 'stylesheet', href: tailwind}]

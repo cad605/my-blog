@@ -3,6 +3,7 @@ import {Link, useLoaderData, useCatch, useParams} from 'remix'
 import type {Blog} from '@prisma/client'
 import {db} from '~/utils/db.server'
 import invariant from 'tiny-invariant'
+import ArrowButton from '~/components/arrow-button'
 
 type LoaderData = {blog: Blog; html: string}
 
@@ -37,27 +38,9 @@ export const loader: LoaderFunction = async ({request, params}) => {
 export const handle = {
   breadcrumb: () => {
     return (
-      <Link
-        to={`/blog`}
-        className="text-zinc-800 font-medium group hover:underline animate-[slide_1s_ease-in-out]"
-      >
-        {' '}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          width="16"
-          height="16"
-          className="inline-block group-hover:-translate-x-1 transition duration-300"
-        >
-          <path
-            fillRule="evenodd"
-            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-            clipRule="evenodd"
-          ></path>
-        </svg>
+      <ArrowButton direction="left" href="/blog">
         Blog
-      </Link>
+      </ArrowButton>
     )
   },
 }
@@ -65,12 +48,17 @@ export const handle = {
 export default function PostSlug() {
   const {blog} = useLoaderData<LoaderData>()
   return (
-    <article className="max-w-xs sm:max-w-prose prose prose-zinc prose-sm md:prose-base lg:prose-lg">
-      <h1>{blog.title}</h1>
-      <h2 className="text-slate-600">{blog.description}</h2>
-      <hr className="border-slate-200"></hr>
-      <div dangerouslySetInnerHTML={{__html: blog.html}}></div>
-    </article>
+    <section>
+      <article className="max-w-xs sm:max-w-prose prose prose-zinc prose-sm md:prose-base lg:prose-lg">
+        <h1 id="top">{blog.title}</h1>
+        <h2 className="text-slate-600">{blog.description}</h2>
+        <hr className="border-slate-200"></hr>
+        <div dangerouslySetInnerHTML={{__html: blog.html}}></div>
+      </article>
+      <ArrowButton href="#top" direction="up">
+        Back to Top
+      </ArrowButton>
+    </section>
   )
 }
 
