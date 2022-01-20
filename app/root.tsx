@@ -24,7 +24,7 @@ export const meta: MetaFunction = () => {
   return {
     description,
     keywords: 'Christopher,Donnelly,blog',
-    'twitter:image': 'https://remix-jokes.lol/social.png',
+    'twitter:image': 'https://avatars.githubusercontent.com/u/80772935?v=4',
     'twitter:card': 'summary_large_image',
     'twitter:creator': '@cdonnelly402',
     'twitter:site': '@cdonnelly402',

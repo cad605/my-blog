@@ -102,7 +102,7 @@ export default function NewPost() {
           <input
             type="hidden"
             name="redirectTo"
-            value={searchParams.get('redirectTo') ?? undefined}
+            value={searchParams.get('redirectTo') ?? '/'}
           />
           <div>
             <label className="block text-xl text-zinc-800 font-medium">
@@ -122,7 +122,6 @@ export default function NewPost() {
                 type="text"
                 defaultValue={actionData?.fields?.username}
                 name="username"
-                aria-role={'username-input'}
                 aria-required={true}
                 aria-invalid={
                   Boolean(actionData?.fieldErrors?.username) || undefined
@@ -153,7 +152,6 @@ export default function NewPost() {
                 type="password"
                 defaultValue={actionData?.fields?.password}
                 name="password"
-                aria-role={'password-input'}
                 aria-required={true}
                 aria-invalid={
                   Boolean(actionData?.fieldErrors?.password) || undefined
