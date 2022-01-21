@@ -18,7 +18,7 @@ export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
 export const loader: LoaderFunction = async ({params}) => {
   const data: LoaderData = {
     blogListItems: await db.blog.findMany({
-      take: 4,
+      take: 2,
       orderBy: [{updatedAt: 'desc'}],
     }),
   }
