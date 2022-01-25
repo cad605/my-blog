@@ -1,5 +1,5 @@
-import {Link, useCatch} from 'remix'
-import type {MetaFunction} from 'remix'
+import { useCatch } from 'remix'
+import type { MetaFunction } from 'remix'
 import ArrowButton from '~/components/arrow-button'
 
 export const meta: MetaFunction = () => {
@@ -75,7 +75,7 @@ export function CatchBoundary() {
   }
 }
 
-export function ErrorBoundary({error}: {error: Error}) {
+export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
 
   return (

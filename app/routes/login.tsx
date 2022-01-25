@@ -1,22 +1,14 @@
 import {
   useTransition,
   useActionData,
-  redirect,
   Form,
   json,
   useCatch,
   Link,
   useSearchParams,
 } from 'remix'
-import type {ActionFunction, LoaderFunction, MetaFunction} from 'remix'
-import invariant from 'tiny-invariant'
-import {db} from '~/utils/db.server'
-import {
-  requireUserId,
-  getUserId,
-  login,
-  createUserSession,
-} from '~/utils/session.server'
+import type { ActionFunction, MetaFunction } from 'remix'
+import { login, createUserSession } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -50,9 +42,9 @@ function validatePassword(password: unknown) {
   }
 }
 
-const badRequest = (data: ActionData) => json(data, {status: 400})
+const badRequest = (data: ActionData) => json(data, { status: 400 })
 
-export const action: ActionFunction = async ({request}) => {
+export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
 
   const password = formData.get('password')
@@ -74,12 +66,12 @@ export const action: ActionFunction = async ({request}) => {
     password: validatePassword(password),
   }
 
-  const fields = {password, username, redirectTo}
+  const fields = { password, username, redirectTo }
   if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({fieldErrors, fields})
+    return badRequest({ fieldErrors, fields })
   }
 
-  const user = await login({username, password})
+  const user = await login({ username, password })
   if (!user) {
     return badRequest({
       fields,
@@ -200,7 +192,7 @@ export function CatchBoundary() {
   }
 }
 
-export function ErrorBoundary({error}: {error: Error}) {
+export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
 
   return (

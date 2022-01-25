@@ -1,5 +1,4 @@
 import {
-  Link,
   Links,
   LiveReload,
   Meta,
@@ -9,14 +8,14 @@ import {
   useCatch,
   useMatches,
 } from 'remix'
-import type {MetaFunction} from 'remix'
+import type { MetaFunction } from 'remix'
 
 import tailwind from './tailwind.css'
 import NavBar from './components/navbar'
 import Footer from './components/footer'
 
 export function links() {
-  return [{rel: 'stylesheet', href: tailwind}]
+  return [{ rel: 'stylesheet', href: tailwind }]
 }
 
 export const meta: MetaFunction = () => {
@@ -96,7 +95,7 @@ export function CatchBoundary() {
   )
 }
 
-export function ErrorBoundary({error}: {error: Error}) {
+export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
 
   return (

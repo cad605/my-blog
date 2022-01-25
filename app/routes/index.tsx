@@ -1,32 +1,32 @@
-import type {LoaderFunction, MetaFunction} from 'remix'
-import {Link, useLoaderData} from 'remix'
-import {Blog} from '@prisma/client'
-import {db} from '~/utils/db.server'
+import type { LoaderFunction, MetaFunction } from 'remix'
+import { Link, useLoaderData } from 'remix'
+import { Blog } from '@prisma/client'
 import ArrowButton from '~/components/arrow-button'
+import { getManyBlogs } from '~/utils/blog.server'
 
 type LoaderData = {
-  blogListItems: Array<Blog>
+  blogs: Array<Blog>
 }
 
-export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
+export const meta: MetaFunction = () => {
   return {
     title: `Christopher Donnelly | Home`,
     description: `Christopher Donnelly's Personal Website`,
   }
 }
 
-export const loader: LoaderFunction = async ({params}) => {
+export const loader: LoaderFunction = async ({ params }) => {
   const data: LoaderData = {
-    blogListItems: await db.blog.findMany({
+    blogs: await getManyBlogs({
       take: 2,
-      orderBy: [{updatedAt: 'desc'}],
+      orderBy: [{ updatedAt: 'desc' }],
     }),
   }
   return data
 }
 
 export default function Index() {
-  const {blogListItems} = useLoaderData<LoaderData>()
+  const { blogs } = useLoaderData<LoaderData>()
 
   return (
     <div className="flex flex-col">
@@ -50,7 +50,7 @@ export default function Index() {
           <p className="text-slate-600">Some recent thoughts</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 place-content-center mt-2">
-          {blogListItems.map(blog => (
+          {blogs.map(blog => (
             <div
               key={blog.slug}
               className="group border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm transition ease-in-out delay-100 hover:-translate-y-2 duration-300 hover:shadow-sm"

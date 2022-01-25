@@ -1,30 +1,28 @@
-import {LoaderFunction, MetaFunction, useMatches} from 'remix'
-import {Link, useLoaderData, useCatch} from 'remix'
-import {Blog, User} from '@prisma/client'
-import {db} from '~/utils/db.server'
-import {getUserId} from '~/utils/session.server'
+import { LoaderFunction, MetaFunction } from 'remix'
+import { Link, useLoaderData, useCatch } from 'remix'
+import { Blog } from '@prisma/client'
+import { getUserId } from '~/utils/session.server'
 import ArrowButton from '~/components/arrow-button'
+import { getManyBlogs } from '~/utils/blog.server'
 
 type LoaderData = {
-  blogListItems: Array<Blog>
+  blogs: Array<Blog>
   isOwner: boolean
 }
 
-export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
+export const meta: MetaFunction = () => {
   return {
     title: `Christopher Donnelly | Blog`,
     description: `Personal blog of Christopher Donnelly`,
   }
 }
 
-export const loader: LoaderFunction = async ({request, params}) => {
-  const userId = await getUserId(request)
-
+export const loader: LoaderFunction = async ({ request, params }) => {
   const data: LoaderData = {
-    blogListItems: await db.blog.findMany({
-      orderBy: [{updatedAt: 'desc'}],
+    blogs: await getManyBlogs({
+      orderBy: [{ updatedAt: 'desc' }],
     }),
-    isOwner: userId ? true : false,
+    isOwner: (await getUserId(request)) ? true : false,
   }
   return data
 }
@@ -40,7 +38,7 @@ export const handle = {
 }
 
 export default function BlogIndexRoute() {
-  const {blogListItems, isOwner} = useLoaderData<LoaderData>()
+  const { blogs, isOwner } = useLoaderData<LoaderData>()
 
   return (
     <div>
@@ -67,7 +65,7 @@ export default function BlogIndexRoute() {
       </section>
       <section>
         <div className="grid md:grid-cols-2 gap-4">
-          {blogListItems.map((blog, i) => (
+          {blogs.map((blog, i) => (
             <div
               key={blog.slug}
               className="group border-2 border-solid border-slate-200 mt-4 p-4 rounded-sm transition ease-in-out delay-100 hover:-translate-y-2 duration-300 animate-[slide_2s_ease-in-out] hover:shadow-sm"
@@ -132,14 +130,14 @@ export function CatchBoundary() {
   }
 }
 
-export function ErrorBoundary({error}: {error: Error}) {
+export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
 
   return (
     <div className="flex flex-col items-center space-y-4">
       <h1 className="font-bold text-4xl text-zinc-800">Sorry!</h1>
       <p className="text-2xl text-slate-600">
-        There was an error loading the blog posts.
+        There was an error loading the blog blogs.
       </p>
     </div>
   )

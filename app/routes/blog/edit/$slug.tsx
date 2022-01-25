@@ -1,38 +1,38 @@
 import {
   useTransition,
   useActionData,
-  redirect,
   Form,
   json,
   useCatch,
   Link,
   useLoaderData,
 } from 'remix'
-import type {ActionFunction, LoaderFunction} from 'remix'
+import type { ActionFunction, LoaderFunction } from 'remix'
 import invariant from 'tiny-invariant'
-import {db} from '~/utils/db.server'
-import {requireUserId} from '~/utils/session.server'
+import { db } from '~/utils/db.server'
+import { requireUserId } from '~/utils/session.server'
 import slugify from 'slugify'
 import fm from 'front-matter'
-import {marked} from 'marked'
-import {Blog} from '@prisma/client'
+import { marked } from 'marked'
+import { Blog } from '@prisma/client'
 import ArrowButton from '~/components/arrow-button'
+import { updateBlog } from '~/utils/blog.server'
 
-type LoaderData = {blog: Blog}
+type LoaderData = { blog: Blog }
 
-export const loader: LoaderFunction = async ({request, params}) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   await requireUserId(request)
   invariant(params.slug, 'expected params.slug')
   const slug = params.slug
   const blog = await db.blog.findUnique({
-    where: {slug},
+    where: { slug },
   })
   if (!blog) {
     throw new Response(`Oops, didn't find that blog post.`, {
       status: 404,
     })
   }
-  return {blog}
+  return { blog }
 }
 
 type ActionData = {
@@ -51,9 +51,9 @@ type ActionData = {
   }
 }
 
-const badRequest = (data: ActionData) => json(data, {status: 400})
+const badRequest = (data: ActionData) => json(data, { status: 400 })
 
-export const action: ActionFunction = async ({request}) => {
+export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request)
   const formData = await request.formData()
 
@@ -76,20 +76,18 @@ export const action: ActionFunction = async ({request}) => {
   invariant(typeof markdown === 'string')
 
   const slug = slugify(title)
-  const {body} = fm(`---\ntitle: ${title}\n---\n\n${markdown}`)
+  const { body } = fm(`---\ntitle: ${title}\n---\n\n${markdown}`)
   const html = marked(body)
 
-  const fields = {slug, title, description, markdown, html}
+  const fields = { slug, title, description, markdown, html }
   if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({fieldErrors, fields})
+    return badRequest({ fieldErrors, fields })
   }
 
-  const blog = await db.blog.update({
-    data: {...fields, userId: userId},
-    where: {slug},
+  return await updateBlog({
+    data: { ...fields, userId: userId },
+    where: { slug },
   })
-
-  return redirect(`/blog/${blog.slug}`)
 }
 
 export const handle = {
@@ -103,7 +101,7 @@ export const handle = {
 }
 
 export default function NewPost() {
-  const {blog} = useLoaderData<LoaderData>()
+  const { blog } = useLoaderData<LoaderData>()
   const actionData = useActionData<ActionData>()
   const transition = useTransition()
 
@@ -219,7 +217,7 @@ export function CatchBoundary() {
   }
 }
 
-export function ErrorBoundary({error}: {error: Error}) {
+export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
 
   return (

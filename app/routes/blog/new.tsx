@@ -1,22 +1,31 @@
 import {
   useTransition,
   useActionData,
-  redirect,
   Form,
   json,
   useCatch,
   Link,
+  useFetcher,
+  useSearchParams,
 } from 'remix'
-import type {ActionFunction, LoaderFunction} from 'remix'
+import type { ActionFunction, LoaderFunction } from 'remix'
 import invariant from 'tiny-invariant'
-import {db} from '~/utils/db.server'
-import {requireUserId} from '~/utils/session.server'
+import { requireUserId } from '~/utils/session.server'
 import slugify from 'slugify'
 import fm from 'front-matter'
-import {marked} from 'marked'
+import { marked } from 'marked'
 import ArrowButton from '~/components/arrow-button'
 
-export const loader: LoaderFunction = async ({request}) => {
+// Import the Reach UI styles
+import comboboxStyles from '@reach/combobox/styles.css'
+import { createNewBlog } from '~/utils/blog.server'
+export function links() {
+  // Add them to the page when this route is active:
+  // https://remix.run/docs/en/v1/api/conventions#links
+  return [{ rel: 'stylesheet', href: comboboxStyles }]
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
   await requireUserId(request)
   return {}
 }
@@ -37,9 +46,9 @@ type ActionData = {
   }
 }
 
-const badRequest = (data: ActionData) => json(data, {status: 400})
+const badRequest = (data: ActionData) => json(data, { status: 400 })
 
-export const action: ActionFunction = async ({request}) => {
+export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request)
   const formData = await request.formData()
 
@@ -62,19 +71,14 @@ export const action: ActionFunction = async ({request}) => {
   invariant(typeof markdown === 'string')
 
   const slug = slugify(title)
-  const {body} = fm(`---\ntitle: ${title}\n---\n\n${markdown}`)
+  const { body } = fm(`---\ntitle: ${title}\n---\n\n${markdown}`)
   const html = marked(body)
 
-  const fields = {slug, title, description, markdown, html}
+  const fields = { slug, title, description, markdown, html }
   if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({fieldErrors, fields})
+    return badRequest({ fieldErrors, fields })
   }
-
-  const blog = await db.blog.create({
-    data: {...fields, userId: userId},
-  })
-
-  return redirect(`/blog/${blog.slug}`)
+  return await createNewBlog({ data: { ...fields, userId: userId } })
 }
 
 export const handle = {
@@ -88,6 +92,14 @@ export const handle = {
 export default function NewPost() {
   const actionData = useActionData<ActionData>()
   const transition = useTransition()
+
+  // Set up a fetcher to fetch languages as the user types
+  const tags = useFetcher<any[]>()
+
+  // ComboboxInput is just an <input/> in the end, so we can read the submitted
+  // value from teh search params when we submit the form (because it's a "get"
+  // form instead of "post", it will be in the URL as a search param).
+  const [searchParams] = useSearchParams()
 
   return (
     <div>
@@ -149,6 +161,7 @@ export default function NewPost() {
               />
             </div>
           </div>
+          <div></div>
           <div>
             <label
               className="block text-xl text-zinc-800 font-medium"
@@ -195,15 +208,14 @@ export function CatchBoundary() {
   }
 }
 
-export function ErrorBoundary({error}: {error: Error}) {
-  console.error(error)
-
+export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <div className="flex flex-col items-center space-y-4">
       <h1 className="font-bold text-4xl text-zinc-800">Sorry!</h1>
       <p className="text-2xl text-slate-600">
         Something went wrong creating the blog post...
       </p>
+      <p className="text-xl text-slate-600">{error.message}</p>
     </div>
   )
 }

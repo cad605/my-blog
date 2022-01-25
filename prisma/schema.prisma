@@ -29,4 +29,11 @@ model Blog {
   html       String
   userId String
   user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags   Tag[]    @relation(references: [id])
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String
+  blogs Blog[] @relation(references: [slug])
 }

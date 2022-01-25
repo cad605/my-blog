@@ -1,12 +1,12 @@
 import bcrypt from 'bcrypt'
-import {createCookieSessionStorage, redirect} from 'remix'
-import {db} from './db.server'
+import { createCookieSessionStorage, redirect } from 'remix'
+import { db } from './db.server'
 
 type LoginForm = {
   username: string
   password: string
 }
-export async function register({username, password}: LoginForm) {
+export async function register({ username, password }: LoginForm) {
   const passwordHash = await bcrypt.hash(password, 10)
   const user = await db.user.create({
     data: {
@@ -17,9 +17,9 @@ export async function register({username, password}: LoginForm) {
   return user
 }
 
-export async function login({username, password}: LoginForm) {
+export async function login({ username, password }: LoginForm) {
   const user = await db.user.findUnique({
-    where: {username},
+    where: { username },
   })
 
   if (!user) return null
@@ -94,7 +94,7 @@ export async function getUser(request: Request) {
   const userId = await getUserId(request)
   if (!userId || typeof userId !== 'string') return null
   try {
-    const user = db.user.findUnique({where: {id: userId}})
+    const user = db.user.findUnique({ where: { id: userId } })
     return user
   } catch {
     throw logout(request)

@@ -1,13 +1,17 @@
-import type {LoaderFunction, MetaFunction} from 'remix'
-import {Link, useLoaderData, useCatch, useParams} from 'remix'
-import type {Blog} from '@prisma/client'
-import {db} from '~/utils/db.server'
+import type { LoaderFunction, MetaFunction } from 'remix'
+import { useLoaderData, useCatch, useParams } from 'remix'
+import type { Blog } from '@prisma/client'
 import invariant from 'tiny-invariant'
 import ArrowButton from '~/components/arrow-button'
+import { getBlogBySlug } from '~/utils/blog.server'
 
-type LoaderData = {blog: Blog; html: string}
+type LoaderData = { blog: Blog }
 
-export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
+export const meta: MetaFunction = ({
+  data,
+}: {
+  data: LoaderData | undefined
+}) => {
   if (!data) {
     return {
       title: 'No blog',
@@ -21,18 +25,15 @@ export const meta: MetaFunction = ({data}: {data: LoaderData | undefined}) => {
   }
 }
 
-export const loader: LoaderFunction = async ({request, params}) => {
+export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.slug, 'expected params.slug')
   const slug = params.slug
-  const blog = await db.blog.findUnique({
-    where: {slug},
+
+  const blog = await getBlogBySlug({
+    where: { slug },
   })
-  if (!blog) {
-    throw new Response(`Oops, didn't find that blog post.`, {
-      status: 404,
-    })
-  }
-  return {blog}
+
+  return { blog }
 }
 
 export const handle = {
@@ -46,14 +47,14 @@ export const handle = {
 }
 
 export default function PostSlug() {
-  const {blog} = useLoaderData<LoaderData>()
+  const { blog } = useLoaderData<LoaderData>()
   return (
     <section>
       <article className="max-w-xs sm:max-w-prose prose prose-zinc prose-sm md:prose-base lg:prose-lg">
         <h1 id="top">{blog.title}</h1>
         <h2 className="text-slate-600">{blog.description}</h2>
         <hr className="border-slate-200"></hr>
-        <div dangerouslySetInnerHTML={{__html: blog.html}}></div>
+        <div dangerouslySetInnerHTML={{ __html: blog.html }}></div>
       </article>
       <ArrowButton href="#top" direction="up">
         Back to Top
@@ -83,9 +84,9 @@ export function CatchBoundary() {
   }
 }
 
-export function ErrorBoundary({error}: {error: Error}) {
+export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error)
-  const {slug} = useParams()
+  const { slug } = useParams()
 
   return (
     <div className="flex flex-col items-center space-y-4">
