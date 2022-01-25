@@ -1,27 +1,17 @@
-import {
-  useTransition,
-  useActionData,
-  Form,
-  json,
-  useCatch,
-  Link,
-  useFetcher,
-  useSearchParams,
-} from 'remix'
+import { useTransition, useActionData, Form, json, useCatch, Link } from 'remix'
 import type { ActionFunction, LoaderFunction } from 'remix'
 import invariant from 'tiny-invariant'
-import { requireUserId } from '~/utils/session.server'
+import { marked } from 'marked'
 import slugify from 'slugify'
 import fm from 'front-matter'
-import { marked } from 'marked'
 import ArrowButton from '~/components/arrow-button'
-
-// Import the Reach UI styles
-import comboboxStyles from '@reach/combobox/styles.css'
 import { createNewBlog } from '~/utils/blog.server'
+import { requireUserId } from '~/utils/session.server'
+import TagPicker from '~/components/tag-picker'
+
+import comboboxStyles from '@reach/combobox/styles.css'
+
 export function links() {
-  // Add them to the page when this route is active:
-  // https://remix.run/docs/en/v1/api/conventions#links
   return [{ rel: 'stylesheet', href: comboboxStyles }]
 }
 
@@ -93,14 +83,6 @@ export default function NewPost() {
   const actionData = useActionData<ActionData>()
   const transition = useTransition()
 
-  // Set up a fetcher to fetch languages as the user types
-  const tags = useFetcher<any[]>()
-
-  // ComboboxInput is just an <input/> in the end, so we can read the submitted
-  // value from teh search params when we submit the form (because it's a "get"
-  // form instead of "post", it will be in the URL as a search param).
-  const [searchParams] = useSearchParams()
-
   return (
     <div>
       <section className="md:relative mb-4 sm:flex sm:flex-col space-y-4">
@@ -110,7 +92,10 @@ export default function NewPost() {
       <section>
         <Form method="post" className="mt-4 space-y-4">
           <div>
-            <label className="block text-xl text-zinc-800 font-medium">
+            <label
+              className="block text-xl text-zinc-800 font-medium"
+              htmlFor="title"
+            >
               Title:{' '}
               {actionData?.fieldErrors?.title ? (
                 <em role="alert" id="name-error">
@@ -123,7 +108,7 @@ export default function NewPost() {
                 type="text"
                 required={true}
                 defaultValue={actionData?.fields?.title}
-                name="title"
+                id="title"
                 aria-required={true}
                 aria-invalid={
                   Boolean(actionData?.fieldErrors?.title) || undefined
@@ -135,7 +120,10 @@ export default function NewPost() {
             </div>
           </div>
           <div>
-            <label className="block text-xl text-zinc-800 font-medium">
+            <label
+              className="block text-xl text-zinc-800 font-medium"
+              htmlFor="description"
+            >
               Description:{' '}
               {actionData?.fieldErrors?.description ? (
                 <em role="alert" id="name-error">
@@ -148,7 +136,7 @@ export default function NewPost() {
                 type="text"
                 required={true}
                 defaultValue={actionData?.fields?.description}
-                name="description"
+                id="description"
                 aria-required={true}
                 aria-invalid={
                   Boolean(actionData?.fieldErrors?.description) || undefined
@@ -161,7 +149,7 @@ export default function NewPost() {
               />
             </div>
           </div>
-          <div></div>
+          <TagPicker></TagPicker>
           <div>
             <label
               className="block text-xl text-zinc-800 font-medium"
@@ -172,7 +160,7 @@ export default function NewPost() {
             {actionData?.fieldErrors?.markdown ? (
               <em>Markdown is required</em>
             ) : null}
-            <textarea id="markdown" cols={60} rows={10} name="markdown" />
+            <textarea id="markdown" cols={60} rows={10} />
           </div>
           <button
             type="submit"
