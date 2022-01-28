@@ -9,7 +9,6 @@ import {
   useMatches,
 } from 'remix'
 import type { MetaFunction } from 'remix'
-
 import tailwind from './tailwind.css'
 import NavBar from './components/navbar'
 import Footer from './components/footer'

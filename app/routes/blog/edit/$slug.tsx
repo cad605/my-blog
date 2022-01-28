@@ -4,7 +4,6 @@ import {
   Form,
   json,
   useCatch,
-  Link,
   useLoaderData,
 } from 'remix'
 import type { ActionFunction, LoaderFunction } from 'remix'
@@ -17,6 +16,8 @@ import { marked } from 'marked'
 import { Blog } from '@prisma/client'
 import ArrowButton from '~/components/arrow-button'
 import { updateBlog } from '~/utils/blog.server'
+import { ErrorPanel, Field } from '~/components/form-elements'
+import { ServerError, MissingPage } from '~/components/errors'
 
 type LoaderData = { blog: Blog }
 
@@ -38,20 +39,24 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 type ActionData = {
   formError?: string
   fieldErrors?: {
-    title: boolean | undefined
-    description: boolean | undefined
-    markdown: boolean | undefined
+    title: string | null | undefined
+    description: string | null | undefined
+    markdown: string | null | undefined
   }
   fields?: {
-    slug: string
     title: string
     description: string
     markdown: string
-    html: string
   }
 }
 
-const badRequest = (data: ActionData) => json(data, { status: 400 })
+function validateFieldType(field: unknown) {
+  if (typeof field !== 'string') {
+    return `This field is required.`
+  }
+}
+
+const badRequest = (data: any) => json(data, { status: 400 })
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request)
@@ -62,30 +67,29 @@ export const action: ActionFunction = async ({ request }) => {
   const markdown = formData.get('markdown')
 
   const fieldErrors = {
-    title: false,
-    description: false,
-    markdown: false,
+    title: validateFieldType(title),
+    description: validateFieldType(description),
+    markdown: validateFieldType(markdown),
   }
 
-  if (!title) fieldErrors.title = true
-  if (!title) fieldErrors.description = true
-  if (!markdown) fieldErrors.markdown = true
+  const fields = { title, description, markdown }
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return badRequest({ fieldErrors, fields })
+  }
 
+  // Make TS happy
   invariant(typeof title === 'string')
   invariant(typeof description === 'string')
   invariant(typeof markdown === 'string')
 
   const slug = slugify(title)
-  const { body } = fm(`---\ntitle: ${title}\n---\n\n${markdown}`)
+  const { body } = fm(
+    `---\ntitle: ${title}\ndescription: ${description}\n---\n\n${markdown}`,
+  )
   const html = marked(body)
 
-  const fields = { slug, title, description, markdown, html }
-  if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({ fieldErrors, fields })
-  }
-
   return await updateBlog({
-    data: { ...fields, userId: userId },
+    data: { title, description, markdown, slug, html, userId: userId },
     where: { slug },
   })
 }
@@ -107,125 +111,65 @@ export default function NewPost() {
 
   return (
     <div>
-      <section className="md:relative mb-4 sm:flex sm:flex-col space-y-4">
+      <div className="md:relative mb-4 sm:flex sm:flex-col space-y-4">
         <h1 className="text-zinc-800 text-4xl font-bold">Edit Post</h1>
-      </section>
+      </div>
       <hr></hr>
-      <section>
-        <Form method="post" className="mt-4 space-y-4">
-          <div>
-            <label className="block text-xl text-zinc-800 font-medium">
-              Title:{' '}
-              {actionData?.fieldErrors?.title ? (
-                <em role="alert" id="name-error">
-                  Title is required
-                </em>
-              ) : null}
-            </label>
-            <div>
-              <input
-                type="text"
-                required={true}
-                defaultValue={blog.title}
-                name="title"
-                aria-required={true}
-                aria-invalid={
-                  Boolean(actionData?.fieldErrors?.title) || undefined
-                }
-                aria-describedby={
-                  actionData?.fieldErrors?.title ? 'title-error' : undefined
-                }
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-xl text-zinc-800 font-medium">
-              Description:{' '}
-              {actionData?.fieldErrors?.description ? (
-                <em role="alert" id="name-error">
-                  description is required
-                </em>
-              ) : null}
-            </label>
-            <div>
-              <input
-                type="text"
-                required={true}
-                defaultValue={blog.description}
-                name="description"
-                aria-required={true}
-                aria-invalid={
-                  Boolean(actionData?.fieldErrors?.description) || undefined
-                }
-                aria-describedby={
-                  actionData?.fieldErrors?.description
-                    ? 'description-error'
-                    : undefined
-                }
-              />
-            </div>
-          </div>
-          <div>
-            <label
-              className="block text-xl text-zinc-800 font-medium"
-              htmlFor="markdown"
-            >
-              Markdown:
-            </label>{' '}
-            {actionData?.fieldErrors?.markdown ? (
-              <em>Markdown is required</em>
-            ) : null}
-            <textarea
-              id="markdown"
-              cols={60}
-              rows={10}
-              name="markdown"
-              defaultValue={blog.markdown}
-            />
-          </div>
+      <main>
+        <Form
+          method="post"
+          className="mt-4 space-y-4"
+          aria-describedby="new-form-error"
+        >
+          <Field
+            name="title"
+            id="title-input"
+            label="Title"
+            type="text"
+            placeholder="Title"
+            defaultValue={blog.title ?? ''}
+            error={actionData?.fieldErrors?.title}
+          />
+          <Field
+            name="description"
+            id="description-input"
+            label="Description"
+            type="text"
+            placeholder="Description"
+            defaultValue={blog.description ?? ''}
+            error={actionData?.fieldErrors?.description}
+          />
+          <Field
+            name="markdown"
+            id="markdown-input"
+            label="Markdown"
+            type="textarea"
+            rows={10}
+            cols={60}
+            defaultValue={blog.markdown ?? ''}
+            error={actionData?.fieldErrors?.markdown}
+          />
           <button
             type="submit"
             className="transfrom hover:-translate-y-1 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-zinc-800 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 focus:bg-slate-600"
           >
             {transition.submission ? 'Updating Post...' : 'Update Blog'}
           </button>
+          {actionData?.formError ? (
+            <ErrorPanel id="new-form-error">{actionData?.formError}</ErrorPanel>
+          ) : null}
         </Form>
-      </section>
+      </main>
     </div>
   )
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return <ServerError error={error} />
 }
 
 export function CatchBoundary() {
   const caught = useCatch()
-
-  switch (caught.status) {
-    case 401: {
-      return (
-        <div className="flex flex-col items-center space-y-4">
-          <h1 className="font-bold text-4xl text-zinc-800">Sorry!</h1>
-          <p className="text-2xl text-slate-600">
-            You're either me and you haven't logged in, or you're not supposed
-            to be here so scram!
-          </p>
-          <Link to="/login">Login</Link>
-        </div>
-      )
-    }
-    default: {
-      throw new Error(`Unhandled error: ${caught.status}`)
-    }
-  }
-}
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
-
-  return (
-    <div className="flex flex-col items-center space-y-4">
-      <h1 className="font-bold text-4xl text-zinc-800">Sorry!</h1>
-      <p className="text-2xl text-slate-600">
-        Something went wrong creating the blog post...
-      </p>
-    </div>
-  )
+  console.error('CatchBoundary', caught)
+  return <MissingPage />
 }

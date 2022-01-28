@@ -1,4 +1,4 @@
-import {Link} from 'remix'
+import { Link } from 'remix'
 
 type ArrowButtonProps = {
   direction?: 'up' | 'down' | 'left' | 'right'
@@ -16,6 +16,7 @@ export default function ArrowButton({
     <Link
       to={href ? href : '/'}
       className={`text-zinc-800 font-medium group hover:underline animate-[slide_1s_ease-in-out]`}
+      {...props}
     >
       {direction === 'left' ? (
         <svg

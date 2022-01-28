@@ -6,6 +6,7 @@ type LoginForm = {
   username: string
   password: string
 }
+
 export async function register({ username, password }: LoginForm) {
   const passwordHash = await bcrypt.hash(password, 10)
   const user = await db.user.create({
@@ -33,7 +34,7 @@ export async function login({ username, password }: LoginForm) {
 
 const sessionSecret = process.env.SESSION_SECRET
 if (!sessionSecret) {
-  throw new Error('Must set environment variable session secret!')
+  throw new Error('Remeber to set your session secret...')
 }
 
 const storage = createCookieSessionStorage({

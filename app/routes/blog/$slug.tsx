@@ -1,9 +1,10 @@
-import type { LoaderFunction, MetaFunction } from 'remix'
 import { useLoaderData, useCatch, useParams } from 'remix'
+import type { LoaderFunction, MetaFunction } from 'remix'
 import type { Blog } from '@prisma/client'
 import invariant from 'tiny-invariant'
 import ArrowButton from '~/components/arrow-button'
 import { getBlogBySlug } from '~/utils/blog.server'
+import { ServerError, MissingPage } from '~/components/errors'
 
 type LoaderData = { blog: Blog }
 
@@ -63,38 +64,12 @@ export default function PostSlug() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
-  const params = useParams()
-  switch (caught.status) {
-    case 404: {
-      return (
-        <div className="flex flex-col items-center space-y-4">
-          <h1 className="font-bold text-4xl text-zinc-800">Sorry!</h1>
-          <p className="text-2xl text-slate-600">
-            Couldn't find a blog post at{' '}
-            <span className="font-bold underline"> blog/{params.slug}</span>.
-          </p>
-        </div>
-      )
-    }
-    default: {
-      throw new Error(`Unhandled error: ${caught.status}`)
-    }
-  }
+export function ErrorBoundary({ error }: { error: Error }) {
+  return <ServerError error={error} />
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
-  const { slug } = useParams()
-
-  return (
-    <div className="flex flex-col items-center space-y-4">
-      <h1 className="font-bold text-4xl text-zinc-800">Sorry!</h1>
-      <p className="text-2xl text-slate-600">
-        There was an error loading the blog post at
-        <span className="font-bold underline"> blog/{slug}</span>.
-      </p>
-    </div>
-  )
+export function CatchBoundary() {
+  const caught = useCatch()
+  console.error('CatchBoundary', caught)
+  return <MissingPage />
 }
