@@ -119,4 +119,15 @@ function ErrorPanel({
   )
 }
 
-export { Label, Input, InputError, Field, ErrorPanel }
+const Button = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithRef<'button'>
+>(({ className, children, ...props }, ref) => {
+  return (
+    <button ref={ref} className={className} type={props.type} {...props}>
+      {children}
+    </button>
+  )
+})
+
+export { Label, Input, InputError, Field, ErrorPanel, Button }

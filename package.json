@@ -23,6 +23,7 @@
     "@types/marked": "^4.0.1",
     "bcrypt": "^5.0.1",
     "front-matter": "^4.0.2",
+    "highlight.js": "^11.4.0",
     "marked": "^4.0.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

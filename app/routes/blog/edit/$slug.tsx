@@ -86,6 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
   const { body } = fm(
     `---\ntitle: ${title}\ndescription: ${description}\n---\n\n${markdown}`,
   )
+
   const html = marked(body)
 
   return await updateBlog({
